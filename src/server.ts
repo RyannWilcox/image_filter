@@ -1,4 +1,4 @@
-import express from 'express';
+import express, {Request, Response} from 'express';
 import bodyParser from 'body-parser';
 import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
@@ -28,7 +28,18 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   //   the filtered image file [!!TIP res.sendFile(filteredpath); might be useful]
 
   /**************************************************************************** */
+  app.get("/filteredimage/", async (req: Request, res: Response) => {
+    const {image_url} = req.query;
 
+    if(!image_url){
+      return res.status(400).send("invalid request, provide a query param.");
+    }
+
+    const filteredPath = await filterImageFromURL(image_url);
+    console.log(filteredPath);
+
+    return res.status(200).sendFile(filteredPath);
+  });
   //! END @TODO1
   
   // Root Endpoint
