@@ -13,11 +13,6 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
   // Use the body parser middleware for post requests
   app.use(bodyParser.json());
 
-  // @TODO1 IMPLEMENT A RESTFUL ENDPOINT
-  // GET /filteredimage?image_url={{URL}}
-  // endpoint to filter an image from a public url.
-  // IT SHOULD
-  //    1
   //    1. validate the image_url query
   //    2. call filterImageFromURL(image_url) to filter the image
   //    3. send the resulting file in the response
@@ -36,12 +31,14 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     }
     try{
       const filteredPath = await filterImageFromURL(image_url);
-      res.status(200).sendFile(filteredPath);
+      res.status(200).sendFile(filteredPath,function (){
+        deleteLocalFiles([filteredPath]);        
+      });
+      //deleteLocalFiles([filteredPath]);
     }catch(error){
-      return res.status(400).send("Error occured while filtering the image");
+      return res.status(422).send("Error occured while filtering the image");
     }
   });
-  //! END @TODO1
   
   // Root Endpoint
   // Displays a simple message to the user
