@@ -31,9 +31,10 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     }
     try{
       const filteredPath = await filterImageFromURL(image_url);
-      res.status(200).sendFile(filteredPath,function (){
+      res.sendFile(filteredPath,function (){
         deleteLocalFiles([filteredPath]);        
       });
+      return res.status(200);
       //deleteLocalFiles([filteredPath]);
     }catch(error){
       return res.status(422).send("Error occured while filtering the image");
