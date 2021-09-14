@@ -34,11 +34,12 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
     if(!image_url){
       return res.status(400).send("invalid request, provide a query param.");
     }
-
-    const filteredPath = await filterImageFromURL(image_url);
-    console.log(filteredPath);
-
-    return res.status(200).sendFile(filteredPath);
+    try{
+      const filteredPath = await filterImageFromURL(image_url);
+      res.status(200).sendFile(filteredPath);
+    }catch(error){
+      return res.status(400).send("Error occured while filtering the image");
+    }
   });
   //! END @TODO1
   
